@@ -44,14 +44,14 @@ class KalshiAlphaBot:
             score += 2
         
         if any(term in category or term in ticker or term in title for term in ['nba', 'nfl', 'mlb', 'nhl', 'soccer', 'sports', 'game', 'championship']):
-            score -= 3
+            score -= 1
         
         volume = float(market.get('volume', 0))
-        if volume > 100000:
+        if volume > 50000:
             score += 3
-        elif volume > 50000:
-            score += 2
         elif volume > 10000:
+            score += 2
+        elif volume > 5000:
             score += 1
         
         open_interest = float(market.get('open_interest', 0))
@@ -65,9 +65,9 @@ class KalshiAlphaBot:
             try:
                 close_date = datetime.fromisoformat(close_time.replace('Z', '+00:00'))
                 days_until = (close_date - datetime.now().astimezone()).days
-                if 7 <= days_until <= 60:
+                if 3 <= days_until <= 90:
                     score += 2
-                elif days_until < 7:
+                elif days_until < 3:
                     score -= 1
                 elif days_until > 180:
                     score -= 1
@@ -255,7 +255,7 @@ Only recommend BUY if there is clear mispricing."""
 
 def main():
     bot = KalshiAlphaBot()
-    results = bot.run_daily_scan(top_n=10, min_alpha_score=4)
+    results = bot.run_daily_scan(top_n=10, min_alpha_score=2)
     print(f"\nScan complete! Found {len(results)} actionable plays.")
     return len(results)
 
