@@ -9,7 +9,7 @@ class KalshiAlphaBot:
     def __init__(self):
         self.anthropic_key = os.getenv('ANTHROPIC_API_KEY')
         self.claude = Anthropic(api_key=self.anthropic_key)
-        self.kalshi_api = "https://api.kalshi.co/trade-api/v2"
+        self.kalshi_api = "https://api.elections.kalshi.com/trade-api/v2"
         self.kalshi_api_key = os.getenv('KALSHI_API_KEY')
         
     def get_headers(self):
