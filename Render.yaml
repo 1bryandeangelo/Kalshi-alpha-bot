@@ -1,0 +1,27 @@
+services:
+
+- type: cron
+  name: kalshi-alpha-bot
+  env: python
+  schedule: “0 14 * * *”  # 10 AM EST (14:00 UTC)
+  buildCommand: pip install -r requirements.txt
+  startCommand: python kalshi_bot.py
+  envVars:
+  - key: ANTHROPIC_API_KEY
+    sync: false
+  - key: KALSHI_EMAIL
+    sync: false
+  - key: KALSHI_PASSWORD
+    sync: false
+  - key: PYTHON_VERSION
+    value: “3.11.0”
+
+# Schedule Options:
+
+# “0 14 * * *”     - Daily at 10 AM EST
+
+# “0 14 * * 1-5”   - Weekdays only at 10 AM EST
+
+# “0 */6 * * *”    - Every 6 hours
+
+# “0 8,14,20 * * *” - 8 AM, 2 PM, 8 PM EST
