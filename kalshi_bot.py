@@ -18,7 +18,7 @@ class KalshiAlphaBot:
         self.claude = Anthropic(api_key=self.anthropic_key)
         
         # Kalshi API endpoints
-        self.kalshi_api = "https://api.elections.kalshi.com/trade-api/v2"
+        self.kalshi_api = "https://trading-api.kalshi.com/trade-api/v2"
         self.kalshi_email = os.getenv('KALSHI_EMAIL')
         self.kalshi_password = os.getenv('KALSHI_PASSWORD')
         
