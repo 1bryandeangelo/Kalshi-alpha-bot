@@ -44,7 +44,7 @@ class KalshiAlphaBot:
             score += 2
         
         if any(term in category or term in ticker or term in title for term in ['nba', 'nfl', 'mlb', 'nhl', 'soccer', 'sports', 'game', 'championship']):
-            score -= 1
+            score -= 3
         
         volume = float(market.get('volume', 0))
         if volume > 50000:
