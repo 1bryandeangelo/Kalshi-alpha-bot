@@ -33,53 +33,67 @@ class KalshiAlphaBot:
             return []
     
     def calculate_alpha_score(self, market):
-        score = 0
-        category = market.get('category', '').lower()
-        ticker = market.get('ticker', '').lower()
-        title = market.get('title', '').lower()
-        
-        if any(term in category or term in ticker or term in title for term in ['fed', 'interest', 'inflation', 'cpi', 'unemployment', 'jobs', 'gdp', 'economy', 'congress', 'senate', 'election', 'vote']):
-            score += 4
-        elif any(term in category or term in ticker or term in title for term in ['politics', 'president', 'government', 'regulation', 'weather', 'earnings', 'supreme', 'court']):
-            score += 2
-        
-        if any(term in category or term in ticker or term in title for term in ['nba', 'nfl', 'mlb', 'nhl', 'soccer', 'sports', 'game', 'championship']):
-            score -= 3
-        
-        volume = float(market.get('volume', 0))
-        if volume > 50000:
-            score += 3
-        elif volume > 10000:
-            score += 2
-        elif volume > 5000:
-            score += 1
-        
-        open_interest = float(market.get('open_interest', 0))
-        if open_interest > 50000:
-            score += 2
-        elif open_interest > 10000:
-            score += 1
-        
-        close_time = market.get('close_time')
-        if close_time:
-            try:
-                close_date = datetime.fromisoformat(close_time.replace('Z', '+00:00'))
-                days_until = (close_date - datetime.now().astimezone()).days
-                if 3 <= days_until <= 90:
-                    score += 2
-                elif days_until < 3:
-                    score -= 1
-                elif days_until > 180:
-                    score -= 1
-            except:
-                pass
-        
-        yes_price = market.get('yes_bid', 0)
-        yes_prob = yes_price / 100 if yes_price else 0.5
-        if 0.20 <= yes_prob <= 0.80:
-            score += 2
-        
-        return max(0, score)
+    score = 0
+    category = market.get('category', '').lower()
+    ticker = market.get('ticker', '').lower()
+    title = market.get('title', '').lower()
+    
+    # WHITELIST: Only allow these exact categories
+    allowed_keywords = [
+        'fed', 'federal reserve', 'interest rate', 'fomc',
+        'inflation', 'cpi', 'pce', 
+        'unemployment', 'jobs report', 'nonfarm',
+        'gdp', 'recession',
+        'election', 'senate', 'congress', 'house', 'vote', 'bill',
+        'president', 'trump', 'biden',
+        'treasury', 'tax', 'tariff',
+        'supreme court', 'scotus'
+    ]
+    
+    # If it doesn't contain ANY allowed keyword, score = 0 (skip it)
+    if not any(keyword in title or keyword in category for keyword in allowed_keywords):
+        return 0
+    
+    # If it DOES contain allowed keywords, give it points
+    score += 3
+    
+    # Volume score
+    volume = float(market.get('volume', 0))
+    if volume > 50000:
+        score += 3
+    elif volume > 10000:
+        score += 2
+    elif volume > 5000:
+        score += 1
+    
+    # Open interest
+    open_interest = float(market.get('open_interest', 0))
+    if open_interest > 50000:
+        score += 2
+    elif open_interest > 10000:
+        score += 1
+    
+    # Time to resolution
+    close_time = market.get('close_time')
+    if close_time:
+        try:
+            close_date = datetime.fromisoformat(close_time.replace('Z', '+00:00'))
+            days_until = (close_date - datetime.now().astimezone()).days
+            if 3 <= days_until <= 90:
+                score += 2
+            elif days_until < 3:
+                score -= 1
+        except:
+            pass
+    
+    # Odds competitiveness
+    yes_price = market.get('yes_bid', 0)
+    yes_prob = yes_price / 100 if yes_price else 0.5
+    if 0.20 <= yes_prob <= 0.80:
+        score += 2
+    
+    return score
+    
     
     def filter_high_alpha_markets(self, markets, min_score=4):
         scored_markets = []
