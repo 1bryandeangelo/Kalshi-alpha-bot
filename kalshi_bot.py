@@ -255,7 +255,7 @@ Only recommend BUY if there is clear mispricing."""
 
 def main():
     bot = KalshiAlphaBot()
-    results = bot.run_daily_scan(top_n=10, min_alpha_score=2)
+    results = bot.run_daily_scan(top_n=10, min_alpha_score=1)
     print(f"\nScan complete! Found {len(results)} actionable plays.")
     return len(results)
 
