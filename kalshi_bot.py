@@ -209,7 +209,7 @@ Only recommend BUY if there is clear mispricing."""
                 print(f"  PASS")
             
             if i < len(top_markets):
-                time.sleep(2)
+                time.sleep(20)
         
         print(f"\nGenerating report...")
         self.generate_report(results)
