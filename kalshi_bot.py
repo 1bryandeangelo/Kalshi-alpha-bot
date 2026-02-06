@@ -39,7 +39,6 @@ def calculate_alpha_score(self, market):
     ticker = market.get('ticker', '').lower()
     title = market.get('title', '').lower()
     
-    # WHITELIST: Only allow these exact categories
     allowed_keywords = [
         'fed', 'federal reserve', 'interest rate', 'fomc',
         'inflation', 'cpi', 'pce', 
@@ -51,14 +50,11 @@ def calculate_alpha_score(self, market):
         'supreme court', 'scotus'
     ]
     
-    # If it doesn't contain ANY allowed keyword, score = 0 (skip it)
     if not any(keyword in title or keyword in category for keyword in allowed_keywords):
         return 0
     
-    # If it DOES contain allowed keywords, give it points
     score += 3
     
-    # Volume score
     volume = float(market.get('volume', 0))
     if volume > 50000:
         score += 3
@@ -67,14 +63,12 @@ def calculate_alpha_score(self, market):
     elif volume > 5000:
         score += 1
     
-    # Open interest
     open_interest = float(market.get('open_interest', 0))
     if open_interest > 50000:
         score += 2
     elif open_interest > 10000:
         score += 1
     
-    # Time to resolution
     close_time = market.get('close_time')
     if close_time:
         try:
@@ -87,7 +81,6 @@ def calculate_alpha_score(self, market):
         except:
             pass
     
-    # Odds competitiveness
     yes_price = market.get('yes_bid', 0)
     yes_prob = yes_price / 100 if yes_price else 0.5
     if 0.20 <= yes_prob <= 0.80:
