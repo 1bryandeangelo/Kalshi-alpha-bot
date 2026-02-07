@@ -11,7 +11,6 @@ class KalshiAlphaBot:
         self.claude = Anthropic(api_key=self.anthropic_key)
         self.kalshi_api = "https://api.elections.kalshi.com/trade-api/v2"
         self.kalshi_api_key = os.getenv('KALSHI_API_KEY')
-
     
     def get_headers(self):
         return {
@@ -240,44 +239,6 @@ def main():
     print(f"\nScan complete! Found {len(results)} actionable plays.")
     return len(results)
 
-
-if __name__ == "__main__":
-    main()
-
-    if len(results) == 0:
-        report.append("No BUY recommendations today.")
-    
-    for i, result in enumerate(results, 1):
-        market = result['market']
-        analysis = result['analysis']
-        
-        title = market.get('title', 'N/A')
-        ticker = market.get('ticker', 'N/A')
-        yes_price = market.get('yes_bid', 0)
-        no_price = market.get('no_bid', 0)
-        volume = market.get('volume', 0)
-        
-        report.append(f"\nOPPORTUNITY #{i}: {analysis['recommendation']}")
-        report.append(f"Confidence: {analysis['confidence']}")
-        report.append(f"\nMARKET: {title}")
-        report.append(f"Ticker: {ticker}")
-        report.append(f"\nCURRENT ODDS:")
-        report.append(f"  YES: {yes_price/100:.1%}")
-        report.append(f"  NO: {no_price/100:.1%}")
-        report.append(f"\nVolume: ${volume:,.0f}")
-        report.append(f"\nANALYSIS:")
-        report.append(analysis['analysis'])
-        report.append("\n" + "-"*80)
-    
-    report_text = "\n".join(report)
-    print(f"\n{report_text}")
-    return report_text
-
-def main():
-    bot = KalshiAlphaBot()
-    results = bot.run_daily_scan(top_n=5, min_alpha_score=2)
-    print(f"\nScan complete! Found {len(results)} actionable plays.")
-    return len(results)
 
 if __name__ == "__main__":
     main()
