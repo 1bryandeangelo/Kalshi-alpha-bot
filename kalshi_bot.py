@@ -264,8 +264,8 @@ def generate_report(self, results):
 def main():
 bot = KalshiAlphaBot()
 results = bot.run_daily_scan(top_n=5, min_alpha_score=2)
-print(f”\nScan complete! Found {len(results)} actionable plays.”)
+print(f"\nScan complete! Found {len(results)} actionable plays.")
 return len(results)
 
-if __name__ == “__main__”:
+if __name__ == "__main__":
 main()
