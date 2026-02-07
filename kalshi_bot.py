@@ -6,13 +6,12 @@ import time
 import json
 
 class KalshiAlphaBot:
-    def **init**(self):
+    def __init__(self):
         self.anthropic_key = os.getenv('ANTHROPIC_API_KEY')
         self.claude = Anthropic(api_key=self.anthropic_key)
         self.kalshi_api = "https://api.elections.kalshi.com/trade-api/v2"
         self.kalshi_api_key = os.getenv('KALSHI_API_KEY')
 
-```
 def get_headers(self):
     return {
         'Authorization': f'Bearer {self.kalshi_api_key}',
@@ -119,7 +118,6 @@ def research_and_validate(self, market):
     no_prob = no_price / 100 if no_price else 0
     
     prompt = f"""You are an expert prediction market analyst researching Kalshi opportunities.
-```
 
 MARKET DETAILS:
 Title: {title}
@@ -150,7 +148,6 @@ Provide:
 
 Only recommend BUY if there is clear mispricing.”””
 
-```
     try:
         message = self.claude.messages.create(
             model="claude-sonnet-4-20250514",
@@ -263,7 +260,6 @@ def generate_report(self, results):
     report_text = "\n".join(report)
     print(f"\n{report_text}")
     return report_text
-```
 
 def main():
 bot = KalshiAlphaBot()
