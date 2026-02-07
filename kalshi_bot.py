@@ -146,7 +146,7 @@ Provide:
 - Position size suggestion
 - Reasoning with sources
 
-Only recommend BUY if there is clear mispricing.”””
+Only recommend BUY if there is clear mispricing."""
 
     try:
         message = self.claude.messages.create(
@@ -267,5 +267,5 @@ results = bot.run_daily_scan(top_n=5, min_alpha_score=2)
 print(f”\nScan complete! Found {len(results)} actionable plays.”)
 return len(results)
 
-if **name** == “**main**”:
+if __name__ == “__main__”:
 main()
