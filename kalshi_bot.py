@@ -52,15 +52,10 @@ class KalshiAlphaBot:
             'regulation', 'sec', 'ftc', 'antitrust'
         ]
         
-        sports_keywords = ['nba', 'nfl', 'mlb', 'nhl', 'soccer', 'football', 'basketball', 'baseball', 'hockey']
-        
-        has_sports = any(sport in title.lower() or sport in category.lower() for sport in sports_keywords)
         has_allowed = any(keyword in title or keyword in category for keyword in allowed_keywords)
         
-        if has_sports and not has_allowed:
-            score -= 2
-        elif has_allowed:
-            score += 3
+        if has_allowed:
+            score += 4
         else:
             score += 1
         
@@ -161,7 +156,7 @@ class KalshiAlphaBot:
             print(f"Error with analysis: {e}")
             return {'analysis': f"Error: {str(e)}", 'recommendation': "PASS", 'confidence': "UNKNOWN", 'success': False}
     
-    def run_daily_scan(self, top_n=5, min_alpha_score=1):
+    def run_daily_scan(self, top_n=5, min_alpha_score=0):
         print(f"\nKALSHI ALPHA BOT")
         print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         
@@ -245,7 +240,7 @@ class KalshiAlphaBot:
 
 def main():
     bot = KalshiAlphaBot()
-    results = bot.run_daily_scan(top_n=5, min_alpha_score=1)
+    results = bot.run_daily_scan(top_n=5, min_alpha_score=0)
     print(f"\nScan complete! Found {len(results)} actionable plays.")
     return len(results)
 
